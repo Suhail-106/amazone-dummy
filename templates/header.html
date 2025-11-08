@@ -69,19 +69,22 @@
              </b></span></p>
        </div>
 
-         <div class="flex rounded h-11 bg-white w-135">
-           <div onclick="allshows()" class="rounded  bg-slate-300 hover:bg-slate-400 w-15 group">
-            <h3 class="text-black flex w-full mt-3 ml-2 ">All ⬇️</h3>
+         <div class="flex rounded h-11 bg-white w-1/3 justify-center">
+
+           <div onclick="allshows()" class="rounded  bg-slate-300 hover:bg-slate-400 w-1/7 group">
+            <h3 class="text-black flex w-full mt-3 ml-2 ">All_⬇️</h3>
            </div>
-           <div>
-            <form method="get">
-              <input type="text" name="searchbar" placeholder=" Search anything you want........" class="w-107 text-black 
-            h-10 p-1">
+
+           <div class="w-1/1 ">
+            <form  method="get">
+              <input type="text" name="searchbar" placeholder=" Search anything you want..........." class="w-full text-black h-10 p-1">
            </div>
-           <div class="w-13 bg-yellow-300 p-1 py-2 text-black rounded">
+           
+           <div class="w-1/7 bg-yellow-300 p-1 py-2 text-black rounded">
             <input type="submit" value="search"> 
+            </form>
            </div>
-           </form>
+       
        </div>
 
 
@@ -124,7 +127,7 @@
       <div class="w-full h-12 px-5 bg-slate-200 font-semibold p-2 shadow">
         <h1>
           Choose your location 
-          <span onclick="updateyourlocat()" class="float-right text-xl hover:border-2 px-3 mt-[-8px] p-1">&times</span>
+          <span onclick="updateyourlocat()" class="float-right text-xl hover:border-2 px-3 -mt-2 p-1">&times</span>
         </h1>
       </div>
 
@@ -183,8 +186,8 @@
 
 
  <div class="w-full bg-slate-800 h-7 max-[430px]:hidden">
-    <div class="flex gap-4 [&>h3]:border [&>h3:hover]:border-white [&>h3]:border-transparent 
-        [&>h3]:rounded [&>h3]:p-[2px] text-white px-2">
+    <div class="flex gap-4 [&>h3]:border [&>h3:hover]:border-white [&>h3]:border-transparent max-[1100px]:gap-2 max-[986px]:gap-1 
+        [&>h3]:rounded [&>h3]:p-0.5 text-white px-2">
         <h3 onclick="All()">All</h3>
         <h3 onclick="window.location.href='{% url 'fresh' %}'">Fresh</h3>
         <h3 onclick="window.location.href='//www.mxplayer.in/?utm_source=perf_g&utm_medium=web&utm_campaign=Sem_brand_21732594131|165059303182|mx%20player&gad_source=1&gad_campaignid=21732594131&gbraid=0AAAAACj0yj8bhedNE3ObcD_n4y7HnEack&gclid=Cj0KCQjwzaXFBhDlARIsAFPv-u_9HRpE6--4y4Oes4VULr4UAVf1B7kDxqKi-DQ-tGXi_VmstsYN9-IaArlDEALw_wcB'">MX Player</h3>

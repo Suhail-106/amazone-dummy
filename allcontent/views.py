@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from maincontainer.models import main, product as productMOdel, CartItem, actiontoys, electronicsstored, mobile,electronicslaptop, electronicsheadphones
 from mobileviews.models import mainob, cartItemMobile, mainob2, mainob3,  bestseller
-from maincontainer.views import filtered_products1
 
 
 def get_discount(price,off):

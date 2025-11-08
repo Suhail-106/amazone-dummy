@@ -45,891 +45,137 @@
 
           {% include "header.html" %}
 
-          {% if type == 'stored' %}
+         
       <h2 class="bg-red-800 p-3 text-center rounded min-[430px]:w-20 my-1 font-bold text-white text-xl">
-        {{  stored_product.storedoffer }} % <span class="min-[430px]:hidden">off ON {{ stored_product.storedname }}</span> 
+        {{  offer1 }} % <span class="min-[430px]:hidden">off ON {{ name1 }}</span> 
     </h2>
        <div class="w-full p-5">
-     <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
+    
+      <div class ="w-full bg-size-[100%_100%] p-10 h-auto" style="background-image:url('{{ bgimage }}')">
+     <div class="flex gap-5 w-68 h-64 overflow-x-auto overflow-y-hidden  " >
       {% for i in "123456" %}
-          <img src="{{ stored_product.storedimage }}" class="min-w-64 h-64 m-auto" alt="">
+      <img src="{{ image1 }}" class="min-w-full h-64 mx-auto rounded-2xl " alt="">
        {% endfor %}
      </div>
+     </div>  
+     
+     <img class="w-20 h-15 mt-2" src="{{ logo }}" alt="">
     <h2 class="text-2xl font-bold mt-4">
-        {{ stored_product.storedname }}
+       {{ name1 }}
     </h2>
+    <div class="font-semibold">
+        <h2>
+       {{ heading }}
+    </h2>
+     
+
+<h2 class="text-md text-black">
+   {{ paragraph1 }}
+   {% if mrp %}
+     <span class="float-right">This product actual MRP is [ ₹{{ mrp }} ]</span>
+   {% endif %}
+</h2>
+    </div>
+    
         <h2 class="font-bold text-2xl">
-            Price: ₹{{ final_pricestored }}
+            Price: ₹{{ final_price }}
         </h2>  
         <span class="font-normal text-sm">
-            MRP: ₹{{ stored_product.storedmrpprice }}
+            MRP: ₹{{ price1 }}
         </span>
         <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
     <p class="font-bold mt-2 text-2xl">
-        Discount: {{ stored_product.storedoffer }}% 
+        Discount: {{ offer1 }}% 
         <button 
             class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
              onclick="shareProduct1(this)"
-            data-name="{{ stored_product.storedname }}"
-            data-price="{{ stored_product.storedmrpprice }}"
-            data-offer="{{ stored_product.storedoffer }}%"
-            data-finalprice="{{ final_pricestored }}"
-            data-link="http://127.0.0.1:8000/product_stored/{{ stored_product.id }}">
+            data-name="{{ name1 }}"
+            data-price="{{ price1 }}"
+            data-offer="{{ offer1 }}%"
+            data-finalprice="{{ final_price }}"
+            data-link="http://127.0.0.1:8000/product/{{ product_type }}/{{ product.id }}">
            <i class="fa-solid fa-share-nodes"></i>
          </button>  
     </p>
+       
+        {% if term %}
+        {% if product_type == 'mobilepage' %}
+        <h2 class="font-semibold">Durability:- {{ term }}</h2>
+        {% else %}
+        <h2>{{ term }}</h2>
+         {% endif %} 
+         {% endif %}
+      
 
-    <div class="mt-6">
-         <!-- Add to Cart -->
-        <form action="{% url 'storedaddtocart' stored_product.id %}" method="POST">
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_stored' stored_product.id %}" method="POST">
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-    </div>
-</div>
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ stored }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-<div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-            {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsstored' stored_product.id %}">
-          <img class="mainimage" src="{{ stored_product.storedimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto  leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ stored_product.storedoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricestored }} <span class="text-slate-500 text-[12px]">Price - ₹{{ stored_product.storedmrpprice }}</span></p>
-            <form action="{% url 'storedaddtocart' stored_product.id %}" class="w-full" method="POST">
-               <h2>{{ stored_product.storedname}}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_stored' stored_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
+        {% if paragraph %}
+        {% if product_type == 'mobilepage' %}
+           <span class="text-blue-500 float-right">[⭐⭐⭐⭐⭐] {{ paragraph }}</span>
+      {% else %}
+          <h2 class="text-xl">{{ paragraph }}</h2>
+      {% endif %} 
+      {% endif %}
+      
+      {% if mainoffer %}
+        {% if product_type == 'mobilepage' %}
+      <h2 class="font-semibold">Offer:- {{ mainoffer }}% and on offer extra offer is  {{ offer1 }}% on SBI Credit cards  </h2>
+      <h2 class="font-semibold">MRP:- {{ mrp }}</h2>
+      <h2 class="font-semibold">Camera :- <span class="float-right">{{ camera }}</span></h2>
+      <h2 class="font-semibold">Processor :- <span class="float-right">{{ processor }}</span></h2>
+      <h2 class="font-semibold">Durability :- <span class="float-right">{{ term }}</span></h2>
+      <h2 class="font-semibold">Battery :- <span class="float-right">{{ battery }}</span></h2>
+      <h2 class="font-semibold">Internal & External Storage :- <span class="float-right">{{ Ram }}</span></h2>
+      <h2 class="font-semibold">Processor :- <span class="float-right">{{ processor }}</span></h2>
+      <h2 class="font-semibold">Today is delivery free for everyone and offers :- <span class="float-right">{% now "d-m-y" %}</span></h2>      
+      {% endif %}
+      {% endif %}
 
-<!----------------------------------------headphones models.py ka liye electronics ------------------------->
-{% elif type == 'headphones' %}
- <h2 class="bg-red-800 p-3 text-center rounded min-[430px]:w-20 my-1 font-bold text-white text-xl">
-        {{  headphones_product.headphonesoffer }} % <span class="min-[430px]:hidden">off ON {{ headphones_product.headphonesname }}</span> 
-    </h2>
-  <div class="w-full p-5">
-   <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ headphones_product.headphonesimage }}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-     </div>
-    <h2 class="text-2xl font-bold mt-4">
-        {{ headphones_product.headphonesname }} 
-    </h2>
-         <h2 class="font-semibold text-xl">
-            Price: ₹{{ final_priceheadphones }}
-        </h2> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ headphones_product.headphonesmrpprice }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    <p class="text-xl font-semibold mt-2">
-        Discount: {{ headphones_product.headphonesoffer }}% 
-         <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ headphones_product.headphonesname }}"
-            data-price="{{ headphones_product.headphonesmrpprice }}"
-            data-offer="{{ headphones_product.headphonesoffer }}%"
-            data-finalprice="{{ final_priceheadphones }}"
-            data-link="http://127.0.0.1:8000/product_headphones/{{ headphones_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button>  
-    </p>
-    <div class="mt-6">
+</div>
+ <div class="mt-6">
          <!-- Add to Cart -->
-        <form action="{% url 'headphonesaddtocart' headphones_product.id %}" method="POST">
+        <form action="{% url 'add_to_cart_dynamic' product_type product.id %}" method="POST">
                {% csrf_token %}
                <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">add to cart</button>
          </form>
         <!-- Buy Now -->
-        <form action="{% url 'buy_now_headphones' headphones_product.id %}" method="POST">
+        <form action="{% url 'buy_now_dynamic' product_type product.id %}" method="POST">
             {% csrf_token %}
             <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">Buy Now</button>
         </form>
     </div>
-</div>
 <div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ headphones }}')" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">🎁 Grab Extra 10% Offer</button>
+  <p id="timer" class="text-red-600 font-bold text-lg">
+    Offer Ends in: 10:00
+  </p>
+  
+  <!-- Extra Offer Button -->
+  <button 
+    onclick="grabOffer('{{ product_type }}', '{{ product.id }}')"
+    class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
+    🎁 Grab Extra 10% Offer
+  </button>
 </div>
-
 <div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
     {% for i in "123456" %}
       <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidde flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsheadphones' headphones_product.id %}">
-          <img class="mainimage" src="{{ headphones_product.headphonesimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto  leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ headphones_product.headphonesoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_priceheadphones }} <span class="text-slate-500 text-[12px]">Price - ₹{{ headphones_product.headphonesmrpprice }}</span></p>    
-            <form action="{% url 'headphonesaddtocart' headphones_product.id %}" class="w-full" method="POST">
-               <h2>{{ headphones_product.headphonesname}}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_headphones' headphones_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!--------------------------------------------electronics laptop --------------------------------------->
-{% elif type == 'laptop' %}
- <h2 class="bg-red-800 p-3 text-center rounded min-[430px]:w-20 my-1 font-bold text-white text-xl">
-        {{  laptop_product.laptopoffer }} % <span class="min-[430px]:hidden">off ON {{ laptop_product.laptopname }}</span> 
-    </h2>
-  <div class="w-full p-5">
-    <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ laptop_product.laptopimage }}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-     </div>
-    <h2 class="text-2xl font-bold mt-4">
-        {{ laptop_product.laptopname }}  
-    </h2>
-        <h2 class="font-semibold text-xl">
-            Price: ₹{{ final_pricelaptop }}
-        </h2> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ laptop_product.laptopmrpprice }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    <p class="text-xl mt-2 font-semibold">
-        Discount: {{ laptop_product.laptopoffer }}% 
-         <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ laptop_product.laptopname }}"
-            data-price="{{ laptop_product.laptopmrpprice }}"
-            data-offer="{{ laptop_product.laptopoffer }}%"
-            data-finalprice="{{ final_pricelaptop }}"
-            data-link="http://127.0.0.1:8000/product_laptop/{{ laptop_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button>  
-    </p>
-    <div class="mt-6">
-         <form action="{% url 'laptopaddtocart' laptop_product.id %}" method="POST">
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">add to cart</button>
-         </form>
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_laptop' laptop_product.id %}" method="POST">
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl"> Buy Now </button>
-        </form>
-    </div>
-</div>
-<div class="mt-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ laptop }}')" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2"> 🎁 Grab Extra 10% Offer</button>
-</div>
-<div class="w-full flex my-5 p-10 h-auto shadow rounded  max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailslaptop' laptop_product.id %}">
-          <img class="mainimage" src="{{ laptop_product.laptopimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto  leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ laptop_product.laptopoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricelaptop}} <span class="text-slate-500 text-[12px]">MRP - ₹{{ laptop_product.laptopmrpprice }}</span></p>
-            <form action="{% url 'laptopaddtocart' laptop_product.id %}" class="w-full" method="POST">
-               <h2 class="font-semibold text-xl">{{ laptop_product.laptopname}}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_laptop' laptop_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!----------------------------------homepage mobile section------------------------------>
-{% elif type == 'mobile' %}
-<h2 class="bg-red-800 p-3 text-center rounded  min-[430px]:w-20 my-1 font-bold text-white text-xl">
-        {{  mobile_product.offermobile }} % <span class="min-[430px]:hidden">off ON {{ mobile_product.nameofmobile }}</span> 
-    </h2>
-  <div class="w-full p-5">
-    
-    <div class="flex  gap-4">
-         <div class="w-[40%]  overflow-hidden  [&>div]:h-full max-[430px]:hidden">
-  <div class="flex w-[200%] animate-rightSlide">
-    <div class="flex gap-2 w-1/2 justify-around">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      
-    </div>
-    <!-- Duplicate shapes for seamless looping -->
-    <div class="flex gap-2 w-1/2 justify-around [&>div]:h-full">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-    </div>
-  </div>
-</div>
-        <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ mobile_product.imagemobile}}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-   </div>
-  <div class="w-[40%]  overflow-hidden  [&>div]:h-full max-[430px]:hidden">
-  <div class="flex w-[200%] animate-leftSlide">
-    <div class="flex gap-2 w-1/2 justify-around">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      
-    </div>
-    <!-- Duplicate shapes for seamless looping -->
-    <div class="flex gap-2 w-1/2 justify-around [&>div]:h-full">
-     <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-    </div>
-  </div>
-</div>
-     
-    </div>
-   
-    <h2 class="text-2xl font-bold mt-4">
-       {{ mobile_product.nameofmmobile }} 
-         <span class="font-semibold text-xl">
-            Price: ₹{{ final_pricemobile }}
-        </span> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ mobile_product.mrpmobile }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-
-       <p class="text-blue-500">✔️Prime</p>
-        <p class="text-xl mt-2 font-semibold">
-        Discount: {{ mobile_product.offermobile }} % 
-         <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ mobile_product.nameofmobile }}"
-            data-price="{{ mobile_product.mrpmobile }}"
-            data-offer="{{ mobile_product.offermobile }}%"
-            data-finalprice="{{ final_pricemobile }}"
-            data-link="http://127.0.0.1:8000/product_mobile/{{ mobile_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button>  
-    </p>
-     
-    <div class="mt-6">
-        <form action="{% url 'add_to_cartmobile' mobile_product.id %}" method="POST">
-
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_mobile' mobile_product.id %}" method="POST">
-
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-        
-    </div>
-</div>
-
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ mobile }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-
-<div class="w-full flex my-5 p-10 h-auto  shadow rounded  max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsmobile' mobile_product.id %}">
-          <img class="mainimage" src="{{ mobile_product.imagemobile }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto  leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ mobile_product.offermobile }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">Price - ₹{{ final_pricemobile }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ mobilepage_product.mainmprice }}</span></p>
-            <form action="{% url 'add_to_cartmobile' mobile_product.id %}" class="w-full" method="POST">
-               <h2>{{ mobile_product.nameofmmobile }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_mobile' mobile_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!------------------------------fresh.vegitablebimagefresh models.py-------------------------->
-{% elif type == 'fresh' %}
-    <h2 class="bg-red-800 p-3 text-center rounded min-[430px]:w-20 font-bold text-white text-xl">
-            {{  fresh_product.offerfresh }} % <span class="min-[430px]:hidden">off ON {{ fresh_product.nameoffresh }}</span> 
-    </h2>
-  <div class="w-full p-5">
-    <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ fresh_product.vegitablebimagefresh }}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-   </div>
-    <h2 class="text-2xl font-bold mt-4">
-        {{ fresh_product.nameoffresh }}  
-        <span class="font-semibold text-xl">
-             [ ₹{{ final_pricefresh }} ] 
-        </span>
-        <span class="font-normal text-sm">
-            MRP: ₹{{ fresh_product.pricefresh }}
-        </span>
-        
-        <span class="font-normal text-sm">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-    <p class="text-sm mt-2 font-bold">
-        Discount: {{ fresh_product.offerfresh }}% 
-        <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ fresh_product.nameoffresh }}"
-            data-price="{{ fresh_product.pricefresh }}"
-            data-offer="{{ fresh_product.offerfresh }}%"
-            data-finalprice="{{ final_pricefresh }}"
-            data-link="http://127.0.0.1:8000/product_fresh/{{ fresh_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button> 
-    </p>
-    <div class="mt-6">
-        <form action="{% url 'add_to_cartfresh' fresh_product.id %}" method="POST">
-
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_fresh' fresh_product.id %}" method="POST">
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-        
-    </div>
-</div>
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ fresh }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-
-<div class="w-full flex gap-4 my-5 p-10 h-auto shadow rounded overflow-x-auto overflow-y-hidden max-[430px]:h-115 max-[430px]:p-1">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
         <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
             {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsfresh' fresh_product.id %}">
-          <img class="mainimage" src="{{ fresh_product.vegitablebimagefresh }}" alt="">
+          <img class="mainimage" src="{{ image1 }}" alt="">
           </a>
           {% endfor %}
         </div>
-        <div class="h-auto leading-5 w-full ">
-           
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ fresh_product.offerfresh }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricefresh }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ fresh_product.pricefresh }}</span></p>
-          
-            <form action="{% url 'add_to_cartfresh' fresh_product.id %}" class="w-full" method="POST">
-               <h2>{{ fresh_product.nameoffresh }}</h2>
+        <div class="h-auto  leading-5 w-full "> 
+
+          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ offer1 }}% off limited time deal </p>
+          <img class="w-20 h-12 rounded-xl float-right m-2" src="{{ image1 }}" alt="">
+
+         <h2 class="font-semibold text-xl">{{ name1 }}</h2>
+
+          <p class="hover:underline text-xl font-semibold ">₹{{ final_price }} <span class="text-slate-500 text-[12px]">Price - ₹{{ price1 }}</span></p>
+            <form action="{% url 'add_to_cart_dynamic' product_type product.id %}" class="w-full" method="POST">
               {% csrf_token %}
                <h2><button class="add_tocartbtn">add to cart</button></h2>
             </form>
-            <form action="{% url 'buy_now_fresh' fresh_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-
-<!--------------------------------bestseller watches---------------------------------------->
-{% elif type == 'bestseller' %}
- <h2 class="bg-red-800 p-3 text-center rounded min-[430px]:w-20 font-bold text-white text-xl">
-           <span class="min-[430px]:hidden"> {{ bestseller_product.contentm }}</span> 
-    </h2>
-  <div class="w-full p-5">
-    <div class="flex overflow-x-auto overflow-y-hidden">
-        {% for i in "123456" %}
-        <img src="{{ bestseller_product.Imagem }}" class="w-64 h-64 m-auto" alt="">
-        {% endfor %}
-    </div>
-    <h2 class="text-2xl font-bold mt-4">
-        {{ bestseller_product.contentm }}  
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-    <p class="text-sm mt-2">
-        <span class="font-semibold text-xl">
-        Price: {{ bestseller_product.pricewacth }}
-        </span>
-        <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ bestseller_product.contentm }}"
-            data-price="{{ bestseller_product.pricewacth }}"
-            data-finalprice="{{ bestseller_product.pricewacth }}"
-            data-link="http://127.0.0.1:8000/product_details_bestseller/{{ bestseller_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button> 
-    </p>
-    <div class="mt-6">
-        <form action="{% url 'filtered_products1' bestseller_product.id %}" method="POST">
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_bestseller' bestseller_product.id %}" method="POST">
-
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-    </div>
-</div>
-
-<div class="w-full  flex gap-5 my-5 p-10 h-auto shadow rounded overflow-x-auto overflow-y-hidden max-[430px]:p-1 ">
-    {% for i in "123456" %}
-      <div class="min-w-67 h-auto bg-slate-100 p-2 shadow rounded max-[430px]:mx-auto">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-        {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsbestseller' bestseller_product.id %}">
-          <img class="mainimage" src="{{ bestseller_product.Imagem }}" alt="">
-          </a>
-         {% endfor %}
-        </div>
-        <div class="h-auto  leading-5 w-full ">  
-          <p class="hover:underline text-xl font-semibold ">₹{{ bestseller_product.pricewacth }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ bestseller_product.pricewacth }}</span></p>
-            <form action="{% url 'filtered_products1' bestseller_product.id %}" class="w-full" method="POST">
-               <h2>{{ bestseller_product.contentm }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_bestseller' bestseller_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-
-<!--------------------------------------mobilepage.html----------------------------------->
-{% elif type == 'mobilepage' %}
- <h2 class="bg-red-800 p-3 text-center rounded  min-[430px]:w-20 my-1 font-bold text-white text-xl">
-        {{  mobilepage_product.mainmoffer }} % <span class="min-[430px]:hidden">off ON {{ mobilepage_product.nameofmmobile }}</span> 
-    </h2>
-  <div class="w-full p-5">
-   
-    <div class="flex  gap-4">
-         <div class="w-[40%]  overflow-hidden  [&>div]:h-full max-[430px]:hidden">
-  <div class="flex w-[200%] animate-rightSlide">
-    <div class="flex gap-2 w-1/2 justify-around">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      
-    </div>
-    <!-- Duplicate shapes for seamless looping -->
-    <div class="flex gap-2 w-1/2 justify-around [&>div]:h-full">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(75%_0%,100%_50%,75%_100%,0%_100%,25%_50%,0%_0%)]"></div>
-    </div>
-  </div>
-</div>
-        <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ mobilepage_product.mainimagemobile}}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-   </div>
-  <div class="w-[40%]  overflow-hidden  [&>div]:h-full max-[430px]:hidden">
-  <div class="flex w-[200%] animate-leftSlide">
-    <div class="flex gap-2 w-1/2 justify-around">
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      
-    </div>
-    <!-- Duplicate shapes for seamless looping -->
-    <div class="flex gap-2 w-1/2 justify-around [&>div]:h-full">
-     <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-      <div class="w-1/3 bg-red-400 [clip-path:polygon(100%_0%,75%_50%,100%_100%,25%_100%,0%_50%,25%_0%)]"></div>
-    </div>
-  </div>
-</div>
-     
-    </div>
-   
-    <h2 class="text-2xl font-bold mt-4">
-       {{ mobilepage_product.nameofmmobile }} 
-         <span class="font-semibold text-xl">
-            Price: ₹{{ final_pricemobilepage }}
-        </span> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ mobilepage_product.mainmprice }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-
-     <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">specs of camera</span>: {{ mobilepage_product.specsofcamera }}  
-    </p>
-
-     <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">Battery</span>: {{ mobilepage_product.specsofbattery }}  
-    </p>
-
-    <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">Processor</span>: {{ mobilepage_product.specsfofprocessor }} 
-        <span class="text-blue-600 float-right"> {{ mobilepage_product.mainmratings }} [products] </span>
-    </p>
-
-     <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">Durability</span>: {{ mobilepage_product.specsofdurability }}  
-        <span class="float-right"> bought in past 3 months </span>
-     </p>
-     
-     <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">Durability</span>: {{ mobilepage_product.mainmdeals }}  
-     </p>
-
-     <p class="text-sm mt-2 font-semibold">
-        <span class="font-bold">offer on credit cards</span>:[ {{ mobilepage_product.mainmoffer}} % off ] and extra Discount 
-        <span class="text-blue-600 float-right"> {{ mobilepage_product.mainmofferoncreditcard }} % On SBI Cards </span>
-     </p>
-    
-       <p class="text-blue-500">✔️Prime</p>
-        <p class="text-xl mt-2 font-semibold">
-        Discount: {{ mobilepage_product.mainmoffer }} % 
-         <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ mobilepage_product.nameofmmobile }}"
-            data-price="{{ mobilepage_product.mainmprice }}"
-            data-offer="{{ mobilepage_product.mainmoffer }}"
-            data-finalprice="{{ final_pricemobilepage }}"
-            data-link="http://127.0.0.1:8000/product_mainmobile/{{ mobilepage_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button> 
-    </p>
-     
-    <div class="mt-6">
-        <form action="{% url 'mainmobileaddtocart' mobilepage_product.id %}" method="POST">
-
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_mobilepage' mobilepage_product.id %}" method="POST">
-
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-        
-    </div>
-</div>
-
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ mobilepage }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-
-<div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsmobilepage' mobilepage_product.id %}">
-          <img class="mainimage" src="{{ mobilepage_product.mainimagemobile }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ mobilepage_product.mainmoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">Price - ₹{{ final_pricemobilepage }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ mobilepage_product.mainmprice }}</span></p>
-            <form action="{% url 'filtered_products1' mobilepage_product.id %}" class="w-full" method="POST">
-               <h2>{{ mobilepage_product.nameofmmobile }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_mobilepage' mobilepage_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!-----------------------------------------------------fashion vocalforlocal1-------------------------------->
-{% elif type == 'vocalforlocal1' %}
-  <h2 class="bg-red-800 p-3 text-center rounded  min-[430px]:w-20  font-bold text-white text-xl">
-        {{  vocalforlocal1_product.offer }} % <span class="min-[430px]:hidden">off ON {{vocalforlocal1_product.interestincontent }}</span> 
-    </h2>
-  <div class="w-full p-5">
-  <div class="flex gap-5 w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ vocalforlocal1_product.image }}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-   </div>
-    <img class="w-15 h-15" src="{{ vocalforlocal1_product.logo }}" alt="">  
-
-    <h2 class="text-2xl font-bold mt-4">
-        {{ vocalforlocal1_product.interestincontent }} 
-         <span class="font-semibold text-xl">
-            Price: ₹{{ final_pricevocalforlocal1 }}
-        </span> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ vocalforlocal1_product.price }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-
-    <p class="text-sm mt-2 font-semibold">
-        Discount: {{ vocalforlocal1_product.offer }} % 
-        <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ vocalforlocal1_product.interestincontent }}"
-            data-price="{{ vocalforlocal1_product.price }}"
-            data-offer="{{ vocalforlocal1_product.offer }}"
-            data-finalprice="{{ final_pricevocalforlocal1 }}"
-            data-link="http://127.0.0.1:8000/Fashion/product_vocalforlocal1/{{ vocalforlocal1_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button>  
-    </p>
-        <p class="text-blue-500">✔️Prime</p>
-    <div class="mt-6">
-        <form action="{% url 'vocalforlocal1_addtocart' vocalforlocal1_product.id %}" method="POST">
-
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_vocalforlocal1' vocalforlocal1_product.id %}" method="POST">
-
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-        
-    </div>
-</div>
-
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ vocalforlocal1 }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-
-<div class="w-full flex my-5 p-10 h-auto shadow rounded  max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-{% for i in "123456" %}
-    <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex ">
-         {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsvocalforlocal1' vocalforlocal1_product.id %}">
-          <img class="mainimage" src="{{ vocalforlocal1_product.image }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-
-        <div class="h-auto leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ vocalforlocal1_product.offer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricevocalforlocal1 }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ vocalforlocal1_product.price }}</span></p> 
-            <form action="{% url 'vocalforlocal1_addtocart' vocalforlocal1_product.id %}" class="w-full" method="POST">
-               <h2 class="font-semibold text-xl">{{ vocalforlocal1_product.interestincontent }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-              <form action="{% url 'buy_now_vocalforlocal1' vocalforlocal1_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!----------------------------------------------------------fashion.html vocalforlocal2------------------------------------------->
-{% elif type == 'vocalforlocal2' %}
-<h2 class="bg-red-800 p-3 text-center rounded  min-[430px]:w-20  font-bold text-white text-xl">
-        {{  vocalforlocal2_product.offer1 }} % <span class="min-[430px]:hidden">off ON {{vocalforlocal2_product.interestincontent1 }}</span> 
-    </h2>
-  <div class="w-full p-5">
-   <div class="flex w-64 m-auto overflow-x-auto overflow-y-hidden">
-      {% for i in "123456" %}
-          <img src="{{ vocalforlocal2_product.image1 }}" class="min-w-64 h-64 m-auto" alt="">
-       {% endfor %}
-   </div>
-    <img class="w-15 h-15" src="{{ vocalforlocal2_product.logo1 }}" alt="">  
-
-    <h2 class="text-2xl font-bold mt-4">
-        {{ vocalforlocal2_product.interestincontent1 }} 
-         <span class="font-semibold text-xl">
-            Price: ₹{{ final_pricevocalforlocal2 }}
-        </span> 
-        <span class="font-normal text-sm">
-            MRP: ₹{{ vocalforlocal2_product.price1 }}
-        </span>
-        <span class="font-normal text-xl">[ ⭐⭐⭐⭐⭐ ]</span> 
-    </h2>
-
-    <p class="text-sm mt-2 font-semibold">
-        Discount: {{ vocalforlocal2_product.offer1 }} % 
-        <button 
-            class="bg-blue-600 hover:bg-blue-500 rounded p-2 px-3 h-10 text-white float-right"
-             onclick="shareProduct1(this)"
-            data-name="{{ vocalforlocal2_product.interestincontent }}"
-            data-price="{{ vocalforlocal2_product.price1 }}"
-            data-offer="{{ vocalforlocal2_product.offer1 }}"
-            data-finalprice="{{ final_pricevocalforlocal2 }}"
-            data-link="http://127.0.0.1:8000/Fashion/product_vocalforlocal2/{{ vocalforlocal2_product.id }}">
-           <i class="fa-solid fa-share-nodes"></i>
-         </button>  
-    </p>
-        <p class="text-blue-500">✔️Prime</p>
-    <div class="mt-6">
-        <form action="{% url 'vocalforlocal2_addtocart' vocalforlocal2_product.id %}" method="POST">
-
-               {% csrf_token %}
-               <button class="w-full bg-yellow-400 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                  add to cart
-               </button>
-         </form>
-
-        <!-- Buy Now -->
-         <form action="{% url 'buy_now_vocalforlocal2' vocalforlocal2_product.id %}" method="POST">
-
-            {% csrf_token %}
-            <button class="w-full bg-yellow-600 hover:bg-yellow-400 px-6 py-2 my-2 font-semibold rounded-2xl">
-                Buy Now
-            </button>
-        </form>
-        
-    </div>
-</div>
-
-<div class="mt-4 m-4 p-4 border rounded">
-    <p id="timer" class="text-red-600 font-bold text-lg">Offer Ends in: 10:00</p>
-    <!-- Extra Offer Button -->
-    <button onclick="grabOffer('{{ vocalforlocal2 }}')" 
-        class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded mt-2">
-        🎁 Grab Extra 10% Offer
-    </button>
-</div>
-
-<div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded max-[430px]:mx-auto">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-         {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsvocalforlocal2' vocalforlocal2_product.id %}">
-          <img class="mainimage" src="{{ vocalforlocal2_product.image1 }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ vocalforlocal2_product.offer1 }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricevocalforlocal2 }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ vocalforlocal2_product.price1 }}</span></p>
-          
-            <form action="{% url 'vocalforlocal2_addtocart' vocalforlocal2_product.id %}" class="w-full" method="POST">
-               <h2 class="text-xl font-semibold">{{ vocalforlocal2_product.interestincontent1 }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_vocalforlocal2' vocalforlocal2_product.id %}" class="w-full" method="POST">
+             <form action="{% url 'buy_now_dynamic' product_type product.id %}" class="w-full" method="POST">
               {% csrf_token %}
                <h2><button class="buy_nowcardbtn">Buy now</button></h2>
             </form>
@@ -943,17 +189,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-{% endif %}
 
 
 <div class="w-full h-auto ">
@@ -1443,274 +678,37 @@
 </div>
 
 
-<div class="w-full h-auto p-2 flex gap-2">
-<!--------------------------------electronics stored-------------------------------------->
-    {% if type == 'stored' %}
-    <div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="fivediv ">
-          {% for i in "123456" %}
-            <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsstored' stored_product.id %}">
-          <img class="mainimage" src="{{ stored_product.storedimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ stored_product.storedoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricestored }} <span class="text-slate-500 text-[12px]">Price - ₹{{ stored_product.storedmrpprice }}</span></p>
-          
-            <form action="{% url 'storedaddtocart' stored_product.id %}" class="w-full" method="POST">
-               <h2>{{ stored_product.storedname}}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_stored' stored_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!------------------------------------------electroncis laptop------------------------------>
-    {% elif type == 'laptop' %}
-   <div class="w-full flex my-5 p-10 h-auto  shadow rounded max-[430px]:h-auto max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="fivediv  ">
-            {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailslaptop' laptop_product.id %}">
-          <img class="mainimage" src="{{ laptop_product.laptopimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ laptop_product.laptopoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricelaptop}} <span class="text-slate-500 text-[12px]">MRP - ₹{{ laptop_product.laptopmrpprice }}</span></p>
-    
-            <form action="{% url 'laptopaddtocart' laptop_product.id %}" class="w-full" method="POST">
-               <h2 class="font-semibold text-xl">{{ laptop_product.laptopname}}</h2>
-              {% csrf_token %}
-               <h2><button class=add_tocartbtn>add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_laptop' laptop_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-   <!----------------------electronics headphones----------------------------------------------->
-    {% elif type == 'headphones' %}
-    <div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="fivediv ">
-          {% for i in "123456" %}
-         <a class=" min-w-full cursor-pointer" href="{% url 'Product_detailsheadphones' headphones_product.id %}">
-          <img class="mainimage" src="{{ headphones_product.headphonesimage }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 leading-5 w-full ">  
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ headphones_product.headphonesoffer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_priceheadphones }} <span class="text-slate-500 text-[12px]">Price - ₹{{ headphones_product.headphonesmrpprice }}</span></p>
-            <form action="{% url 'headphonesaddtocart' headphones_product.id %}" class="w-full" method="POST">
-               <h2 class="font-semibold text-xl">{{ headphones_product.headphonesname}}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_headphones' headphones_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!---------------------------------------homepage mobile-------------------------------------->
 
-     {% elif type == 'mobile' %}
-  <div class="w-full  flex my-5 p-10 h-auto shadow rounded  max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsmobile' mobile_product.id %}">
-          <img class="mainimage" src="{{ mobile_product.imagemobile }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-
-        <div class="h-auto my-3 leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ mobile_product.offermobile }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricemobile }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ mobile_product.mrpmobile }}</span></p>
-            <form action="{% url 'add_to_cartmobile' mobile_product.id %}" class="w-full" method="POST">
-               <h2>{{ mobile_product.nameofmmobile }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_mobile' mobile_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-<!--------------------------------fresh vegitables------------------------------------------->    
-     {% elif type == 'fresh' %}
-      <div class="w-full flex gap-4 my-5 p-10 h-auto shadow rounded overflow-x-auto overflow-y-hidden  max-[430px]:p-1">
-      {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-            {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsfresh' fresh_product.id %}">
-          <img class="mainimage" src="{{ fresh_product.vegitablebimagefresh }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 leading-5 w-full ">   
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ fresh_product.offerfresh }}% off limited time deal </p>
-         <p class="hover:underline text-xl font-semibold ">₹{{ final_pricefresh }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ fresh_product.pricefresh }}</span></p>  
-            <form action="{% url 'add_to_cartfresh' fresh_product.id %}" class="w-full" method="POST">
-               <h2>{{ fresh_product.nameoffresh }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_fresh' fresh_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-    </div>
-    {% endfor %}
-  </div>
-
-<!----------------------------------------------------bestseller watches------------------------------>
-{% elif type == 'bestseller'%}
-      <div class="w-full  flex gap-5 mb-10 p-10 h-auto shadow rounded overflow-x-auto overflow-y-hidden max-[430px]:p-1 ">
-    {% for i in "123456" %}
-      <div class="min-w-67 h-auto bg-slate-100 p-2 shadow rounded max-[430px]:mx-auto">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-            {% for i in "123456" %}
-            <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsbestseller' bestseller_product.id %}">
-           <img class="mainimage" src="{{ bestseller_product.Imagem }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 leading-5 w-full ">  
-          <p class="hover:underline text-xl font-semibold ">₹{{ bestseller_product.pricewacth }} </p>
-            <form action="{% url 'filtered_products1' bestseller_product.id %}" class="w-full" method="POST">
-               <h2>{{ bestseller_product.contentm }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-            <form action="{% url 'buy_now_bestseller' bestseller_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-  <br>
-</div>
-
-<!--------------------------------------mobilepage.html------------------------>
-{% elif type == 'mobilepage' %}
-<div class="w-full  flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-    {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-          {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsmobilepage' mobilepage_product.id %}">
-          <img class="mainimage" src="{{ mobilepage_product.mainimagemobile }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-
-        <div class="h-auto my-3 leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ mobilepage_product.mainmprice }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricemobilepage }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ mobilepage_product.mainmprice }}</span></p>
-            <form action="{% url 'filtered_products1' mobilepage_product.id %}" class="w-full" method="POST">
-               <h2>{{ mobilepage_product.nameofmmobile }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_mobilepage' mobilepage_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!--------------------------------------fashion.html vocalforlocal1--------------------------------->
-{% elif type == 'vocalforlocal1' %}
-<div class="w-full flex my-5 p-10 h-auto shadow rounded  max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
-{% for i in "123456" %}
-    <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
-        <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-         {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsvocalforlocal1' vocalforlocal1_product.id %}">
-          <img class="mainimage" src="{{ vocalforlocal1_product.image }}" alt="">
-          </a>
-          {% endfor %}
-        </div>
-        <div class="h-auto my-3 eading-5 w-full "> 
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ vocalforlocal1_product.offer }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricevocalforlocal1}} <span class="text-slate-500 text-[12px]">MRP - ₹{{ vocalforlocal1_product.price }}</span></p> 
-            <form action="{% url 'vocalforlocal1_addtocart' vocalforlocal1_product.id %}" class="w-full" method="POST">
-               <h2 class="font-semibold text-xl">{{ vocalforlocal1_product.interestincontent }}</h2>
-              {% csrf_token %}
-               <h2><button class="add_tocartbtn">add to cart</button></h2>
-            </form>
-             <form action="{% url 'buy_now_vocalforlocal1' vocalforlocal1_product.id %}" class="w-full" method="POST">
-              {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
-            </form>
-        </div>
-  </div>
-  {% endfor %}
-</div>
-
-<!---------------------------------------fashion.html vocalforlocal2----------------------------------------->
-{% elif type == 'vocalforlocal2' %}
 <div class="w-full flex my-5 p-10 h-auto shadow rounded max-[430px]:p-1 overflow-x-auto overflow-y-hidden gap-5">
     {% for i in "123456" %}
-      <div class="min-w-66 h-full bg-slate-100 p-2  flex-wrap  shadow rounded max-[430px]:mx-auto">
+      <div class="min-w-66 h-full bg-slate-100 p-2 flex-wrap shadow rounded">
         <div class="w-50 h-55 m-auto overflow-x-auto overflow-y-hidden flex">
-         {% for i in "123456" %}
-         <a class="min-w-full cursor-pointer" href="{% url 'Product_detailsvocalforlocal2' vocalforlocal2_product.id %}">
-          <img class="mainimage" src="{{ vocalforlocal2_product.image1 }}" alt="">
+            {% for i in "123456" %}
+          <img class="mainimage" src="{{ image1 }}" alt="">
           </a>
           {% endfor %}
         </div>
-        <div class="h-auto my-3 leading-5 w-full ">
-          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ vocalforlocal2_product.offer1 }}% off limited time deal </p>
-          <p class="hover:underline text-xl font-semibold ">₹{{ final_pricevocalforlocal2 }} <span class="text-slate-500 text-[12px]">MRP - ₹{{ vocalforlocal2_product.price1 }}</span></p>
-            <form action="{% url 'vocalforlocal2_addtocart' vocalforlocal2_product.id %}" class="w-full" method="POST">
-              <h2 class="text-xl font-semibold">{{ vocalforlocal2_product.interestincontent1 }}</h2>
+        <div class="h-auto  leading-5 w-full "> 
+
+          <p class="bg-red-600 p-1 rounded text-white font-semibold">{{ offer1 }}% off limited time deal </p>
+          <img class="w-20 h-12 rounded-xl float-right m-2" src="{{ image1 }}" alt="">
+
+         <h2 class="font-semibold text-xl">{{ name1 }}</h2>
+
+          <p class="hover:underline text-xl font-semibold ">₹{{ final_price }} <span class="text-slate-500 text-[12px]">Price - ₹{{ price1 }}</span></p>
+            <form action="{% url 'add_to_cart_dynamic' product_type product.id %}" class="w-full" method="POST">
               {% csrf_token %}
                <h2><button class="add_tocartbtn">add to cart</button></h2>
             </form>
-            <form action="{% url 'buy_now_vocalforlocal2' vocalforlocal2_product.id %}" class="w-full" method="POST">
+             <form action="{% url 'buy_now_dynamic' product_type product.id %}" class="w-full" method="POST">
               {% csrf_token %}
-               <h2><button class="buy_nowcardbtn">add to cart</button></h2>
+               <h2><button class="buy_nowcardbtn">Buy now</button></h2>
             </form>
         </div>
   </div>
   {% endfor %}
 </div>
 
-
-
-     {% endif %}
-
-</div>
 
 
  {% include "footer.html" %}
@@ -1751,80 +749,31 @@ function showDiv(number) {
 </script>
 
 
-
-
 <script>
-let timeLeft = 600;  // 10 minutes
-
-const timerElement = document.getElementById("timer");
-const countdown = setInterval(() => {
-    let minutes = Math.floor(timeLeft / 60);
-    let seconds = timeLeft % 60;
-    timerElement.innerText = `Offer Ends in: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    timeLeft--;
-
-    if (timeLeft < 0) {
-        clearInterval(countdown);
-        timerElement.innerText = "Offer Expired!";
-    }
-}, 1000);
-
-
-function grabOffer(type) {
-    let productId = null;
-
-    {% if type == 'headphones' %}
-        productId = {{ headphones_product.id }};
-    {% elif type == 'laptop' %}
-        productId = {{ laptop_product.id }};
-    {% elif type == 'stored' %}
-        productId = {{ stored_product.id }};
-    {% elif type == 'mobile' %}
-        productId = {{ mobile_product.id }};  
-    {% elif type == 'fresh' %}
-        productId = {{ fresh_product.id }};     
-    {% elif type == 'bestseller' %}
-        productId = {{ bestseller_product.id }};    
-    {% elif type == 'mobilepage' %}
-        productId = {{ mobilepage_product.id }};   
-    {% elif type == 'vocalforlocal1' %}
-        productId = {{ vocalforlocal1_product.id }};           
-    {% endif %}
-
-    if (!productId) {
-        alert("Product ID not found!");
-        return;
-    }
-
-    if (timeLeft <= 0) {
-        alert("Offer expired!");
-        return;
-    }
-
-    // Redirect to the correct buy-now URL
-    let url = "";
-    {% if type == 'headphones' %}
-        url = "{% url 'buy_now_headphones' 0 %}".replace('0', productId);
-    {% elif type == 'laptop' %}
-        url = "{% url 'buy_now_laptop' 0 %}".replace('0', productId);
-    {% elif type == 'stored' %}
-        url = "{% url 'buy_now_stored' 0 %}".replace('0', productId);
-     {% elif type == 'mobile' %}
-        url = "{% url 'buy_now_mobile' 0 %}".replace('0', productId); 
-     {% elif type == 'fresh' %}
-        url = "{% url 'buy_now_fresh' 0 %}".replace('0', productId);       
-    {% elif type == 'bestseller' %}
-        url = "{% url 'buy_now_bestseller' 0 %}".replace('0', productId);   
-    {% elif type == 'mobilepage' %}
-        url = "{% url 'buy_now_mobilepage' 0 %}".replace('0', productId);    
-    {% elif type == 'vocalforlocal1' %}
-        url = "{% url 'buy_now_vocalforlocal1' 0 %}".replace('0', productId);           
-    {% endif %}
-
-    window.location.href = url + "?extra_offer=true";
+function grabOffer(type, id) {
+  const url = `/buy-now/${type}/${id}/?extra_offer=true`;
+  window.location.href = url;
 }
-</script>
 
+// Optional timer (10 min countdown)
+let time = 600; // seconds (10 minutes)
+const timerEl = document.getElementById('timer');
+
+function updateTimer() {
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  timerEl.textContent = `Offer Ends in: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  
+  if (time > 0) {
+    time--;
+    setTimeout(updateTimer, 1000);
+  } else {
+    timerEl.textContent = "⏰ Offer Expired!";
+  }
+}
+
+updateTimer();
+</script>
 
        
 {% include 'footermobile.html' %}

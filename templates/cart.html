@@ -43,7 +43,7 @@
             {# for mobile section #}
             {% for mob in mobile %}
             {% if mob.nameofmobile == item.content %}
-            <a class="cursor-pointer" href="{% url 'Product_detailsmobile' mob.id %}">
+            <a class="cursor-pointer" href="{% url 'product_detail_dynamic' 'mobile' mob.id %}">
             <img src="{{ mob.imagemobile }}" alt="{{ mob.nameofmobile}}"
             class="w-20 h-20 object-cover rounded mr-4">
             </a>
@@ -54,7 +54,7 @@
             {# for bestseller #}
             {% for best in bestseller %}
             {% if best.contentm == item.content %}
-            <a href="{% url 'Product_detailsbestseller' best.id %}">
+            <a href="{% url 'product_details_dynamic' 'bestseller' best.id %}">
             <img  class="w-20 h-20 object-cover hover:scale-110 transition-transform
             ease-in-out duration-700 rounded mr-4" src="{{ best.Imagem }}" alt="{{ best.contentm }}">
             </a>
@@ -64,7 +64,7 @@
             {# for freshvegitables #}
             {% for fresh in fresh %}
             {% if fresh.nameoffresh == item.content %}
-            <a href="{% url 'Product_detailsfresh' fresh.id  %}">
+            <a href="{% url 'product_detail_dynamic' 'fresh' fresh.id  %}">
             <img class="w-20 h-20 object-cover hover:scale-110 transition-transform
             ease-in-out duration-700 rounded mr-4"
              src="{{ fresh.vegitablebimagefresh }}" alt="{{ fresh.nameoffresh }}">
@@ -85,7 +85,7 @@
              {# electronicslaptop #}
              {% for elaptop in electronicslaptop %}
              {% if elaptop.laptopname == item.content %}
-                <a href="{% url 'Product_detailslaptop' elaptop.id  %}">
+                <a href="{% url 'product_detail_dynamic' 'laptop' elaptop.id  %}">
               <img class="w-20 h-20 object-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ elaptop.laptopimage }}" alt="">
                 </a>
@@ -100,6 +100,18 @@
                 <a href="{% url 'Product_detailsheadphones' elheadphones.id  %}">
               <img class="w-20 h-20 object-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ elheadphones.headphonesimage }}" alt="">
+                </a>
+               {% endif %}
+              {% endfor %}
+
+               {# electronics stored #}
+
+               {% for elstored in electronicsstored %}
+                {% if elstored.storedname ==  item.content %}
+                <a href="{% url 'product_detail_dynamic' 'stored' elstored.id  %}">
+              <img class="w-20 h-20 object-cover hover:scale-110 transition-transform
+                  ease-in-out duration-700 rounded mr-4"src="{{ elstored.storedimage }}" alt="">
+                </a>
                {% endif %}
               {% endfor %}
 
@@ -107,7 +119,7 @@
                
                {% for vocalforlocal in vocalforlocal %}
                 {% if vocalforlocal.interestincontent == item.content %}
-                <a href="{% url 'Product_detailsvocalforlocal1' vocalforlocal.id  %}">
+                <a href="{% url 'product_detail_dynamic' 'vocalforlocal' vocalforlocal.id  %}">
               <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ vocalforlocal.image }}" alt="">
                 </a>
@@ -118,7 +130,7 @@
                
                {% for vocalforlocal1 in vocalforlocal1 %}
                 {% if vocalforlocal1.interestincontent1 == item.content %}
-                <a href="{% url 'Product_detailsvocalforlocal2' vocalforlocal1.id  %}">
+                <a href="{% url 'product_detail_dynamic' 'vocalforlocal1' vocalforlocal1.id  %}">
               <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ vocalforlocal1.image1 }}" alt="">
                 </a>
@@ -129,7 +141,7 @@
                
                {% for shopclothing in shopclothing %}
                 {% if shopclothing.contentshopclothing == item.content %}
-                <a href="{% url 'Product_detailsshopclothing' shopclothing.id  %}">
+                <a href="{% url 'product_details_dynamic' 'shopclothing' shopclothing.id  %}">
               <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ shopclothing.imageshopclothing }}" alt="">
                 </a>
@@ -162,7 +174,7 @@
                
                {% for shopBeauty in shopBeauty %}
                 {% if shopBeauty.contentshopBeauty == item.content %}
-                <a href="{% url 'Product_detailsshopbeauty' shopBeauty.id  %}">
+                <a href="{% url 'product_details_dynamic' 'shopBeauty' shopBeauty.id  %}">
                  <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ shopBeauty.imageshopBeauty  }}" alt="">
                 </a>  
@@ -173,17 +185,21 @@
                
                {% for bedroom in bedroom %}
                 {% if bedroom.content == item.content %}
-                <a href="{% url 'Product_detailsbedroom' bedroom.id  %}">
+                <a href="{% url 'product_details_dynamic' 'bedroom' bedroom.id  %}">
                  <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ bedroom.image  }}" alt="">
                 </a>
                {% endif %}
               {% endfor %}
-     
+
+
+              {# mainob #}     
               {% for mainob in mainob %}
               {% if mainob.name == item.content %}
+              <a href="{% url 'product_details_dynamic' 'mainob' mainob.id %}">
                <img class="w-20 h-20 eadphonesnameobject-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ mainob.image  }}" alt="">
+              </a>
               {% endif %}
               {% endfor %}
               
@@ -207,13 +223,38 @@
 
                 <!-----------------buy now button--------------------------------->
                <!-----------------------------buy buttons-------------------------->
+               
+               
+               {# mainob #} 
 
+              {% for mainob in mainob %}
+              {% if mainob.name == item.content %}
+              <span>
+                    <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'mainob' mainob.id %}" class="w-50">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
+                   </form>
+                   </span>
+              {% endif %}
+              {% endfor %}
 
+                {# electronics stored #}
+
+               {% for elstored in electronicsstored %}
+                {% if elstored.storedname ==  item.content %}
+                <span>
+                      <form method="post" action="{% url 'buy_now_dynamic' 'stored' elstored.id %}" class="w-50">
+                        {% csrf_token %}
+                        <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
+                   </form>
+                   </span>
+               {% endif %}
+              {% endfor %}
                     {# Home&kitchen bedroom #}
                          {% for bedroom in bedroom %}
                 {% if bedroom.content == item.content %}
                     <span>
-                        <form method="post" action="{% url 'buy_now_bedroom' bedroom.id %}" class="w-50">
+                        <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'bedroom' bedroom.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -227,7 +268,7 @@
                {% for shopBeauty in shopBeauty %}
                 {% if shopBeauty.contentshopBeauty == item.content %}
                 <span>
-                        <form method="post" action="{% url 'buy_now_shopbeauty' shopBeauty.id %}" class="w-50">
+                        <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'shopBeauty' shopBeauty.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -241,7 +282,7 @@
                {% for Budgetaddons in Budgetaddons %}
                 {% if Budgetaddons.contentshopBudget == item.content %}
               <span>
-                        <form method="post" action="{% url 'buy_now_shopBudget' Budgetaddons.id %}" class="w-50">
+                        <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'shopBudget' Budgetaddons.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -260,7 +301,7 @@
                {% for shopfootwear in shopfootwear %}
                 {% if shopfootwear.contentshopfootwear == item.content %}
               <span>
-                        <form method="post" action="{% url 'buy_now_shopfootwear' shopfootwear.id %}" class="w-50">
+                        <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'shopfootwear' shopfootwear.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -274,7 +315,7 @@
                {% for shopclothing in shopclothing %}
                 {% if shopclothing.contentshopclothing == item.content %}
                <span>
-                        <form method="post" action="{% url 'buy_now_shopclothing' shopclothing.id %}" class="w-50">
+                        <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'shopclothing' shopclothing.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -289,7 +330,7 @@
                {% for vocalforlocal1 in vocalforlocal1 %}
                 {% if vocalforlocal1.interestincontent1 == item.content %}
                   <span>
-                        <form method="post" action="{% url 'buy_now_vocalforlocal2' vocalforlocal1.id %}" class="w-50">
+                        <form method="post" action="{% url 'buy_now_dynamic' 'vocalforlocal1' vocalforlocal1.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -302,7 +343,7 @@
                {% for vocalforlocal in vocalforlocal %}
                 {% if vocalforlocal.interestincontent == item.content %}
               <span>
-                        <form method="post" action="{% url 'buy_now_vocalforlocal1' vocalforlocal.id %}" class="w-50">
+                        <form method="post" action="{% url 'buy_now_dynamic' 'vocalforlocal' vocalforlocal.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -315,7 +356,7 @@
                     {% for elheadphones in electronicsheadphones %}
                     {% if elheadphones.headphonesname == item.content %}
                      <span>
-                        <form method="post" action="{% url 'buy_now_headphones' elheadphones.id %}" class="w-50">
+                        <form method="post" action="{% url 'buy_now_dynamic' 'headphones' elheadphones.id %}" class="w-50">
                         {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -328,7 +369,7 @@
                 {% for fresh in fresh %}
                 {% if item.content == fresh.nameoffresh %}
                 <span>
-                    <form method="post" action="{% url 'buy_now_fresh' fresh.id %}" class="w-50">
+                    <form method="post" action="{% url 'buy_now_dynamic' 'fresh' fresh.id %}" class="w-50">
                     {% csrf_token %}
                      <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -339,7 +380,7 @@
                {% for best in bestseller %}
                {% if item.content == best.contentm %}
                 <span>
-                    <form method="post" action="{% url 'buy_now_bestseller' best.id %}" class="w-50">
+                    <form method="post" action="{% url 'Fashion_buy_now_dynamic' 'bestseller' best.id %}" class="w-50">
                     {% csrf_token %}
                      <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                    </form>
@@ -388,7 +429,7 @@
                  {% for elaptop in electronicslaptop %}
                 {% if elaptop.laptopname == item.content %}
                   <span>
-                     <form method="post" action="{% url 'buy_now_laptop' elaptop.id %}" class="w-50">
+                     <form method="post" action="{% url 'buy_now_dynamic' 'laptop' elaptop.id %}" class="w-50">
                          {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                      </form>
@@ -400,7 +441,7 @@
                  {% for mob in mobile %}
                     {% if mob.nameofmobile == item.content %}
                           <span>
-                           <form method="post" action="{% url 'buy_now_mobile' mob.id %}" class="w-50">
+                           <form method="post" action="{% url 'buy_now_dynamic' 'mobile' mob.id %}" class="w-50">
                             {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                            </form>
@@ -415,7 +456,7 @@
                 {% for phone in mainmobile %}
                 {% if phone.nameofmobile == item.content or phone.specsofcamera == phone.content or phone.specsofdurability == item.content %}
                       <span>
-                           <form method="post" action="{% url 'buy_now_mobilepage' phone.id %}" class="w-50">
+                           <form method="post" action="{% url 'buy_now_dynamic' 'mobilepage' phone.id %}" class="w-50">
                             {% csrf_token %}
                         <button type="submit" class="bg-yellow-600 px-5 rounded font-semibold">Buy Now</button>
                            </form>

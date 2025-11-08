@@ -146,77 +146,7 @@ def add_to_cart(request, product_id, which_content):
     return redirect(request.META.get('HTTP_REFERER','home'))
 
 
-#----------------------------------------------home mobile modls.py -------------------
-
-def add_to_cartmobile(request, mobile_id):
-    homemobile = get_object_or_404(mobile,id=mobile_id)
-
-    nameofhomemobile = homemobile. nameofmobile
-    homemobileoffer = homemobile.offermobile
-    homemobileprice = homemobile.mrpmobile
-
-    if nameofhomemobile is None:
-        return redirect('home')
-    
-    cart_item, created = CartItem.objects.get_or_create(
-        product = None,
-        content = nameofhomemobile,
-        price = homemobileprice,
-        defaults={'quantity':1,'off174':homemobileoffer}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER','home'))    
-
-
-def product_details_viewelectronicsmobile(request, mobile_id):
-    product = get_object_or_404(mobile, id=mobile_id)
-    price = Decimal(product.mrpmobile)
-    offer = Decimal(product.offermobile)
-    final_pricemobile = round(price - (price * offer / Decimal(100)),2)
-
-    return render(request, 'product_detail1.html', {'mobile_product': product, 'type': 'mobile',
-    'final_pricemobile':final_pricemobile,'type':'mobile'})
-
-
-def buy_now_mobile(request, mobile_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(mobile, id=mobile_id)
-
-    # Extract values from model
-    name = product.nameofmobile
-    price = Decimal(product.mrpmobile)
-    offer = Decimal(product.offermobile)
-    image = product.imagemobile
-
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
-
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
-
-    # Calculate final discounted price
-    final_price = price - (price * offer / Decimal(100))
-
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price)
-    request.session['product_offer'] = str(offer)
-    request.session['product_final_price'] = str(final_price)
-
-
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "offer": offer,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
-
-#---------------------------end of home mobile models.py ----------------------    
+  
 
 def cart_view(request):
     cart_items = CartItem.objects.all()
@@ -227,6 +157,7 @@ def cart_view(request):
     allmainmobile = mainmobile.objects.all()
     allelectronicslaptop = electronicslaptop.objects.all()
     allelectronicsheadphones = electronicsheadphones.objects.all()
+    allelectronicsstored = electronicsstored.objects.all()
     allvocalforloacal = vocalforlocal.objects.all()
     allvocalforloacal1 = vocalforlocal1.objects.all()
     allshopclothing = shopclothing.objects.all()
@@ -235,6 +166,7 @@ def cart_view(request):
     allShopBeauty = shopBeauty.objects.all() 
     allbedroom = bedroom.objects.all()
     allmainob = mainob.objects.all()
+    
    
     total_price = 0
     total_offer = 0
@@ -256,7 +188,7 @@ def cart_view(request):
         'cart_items': cart_items, 'product': allproduct,'total_price': total_price,
         'total_offer': total_offer, 'total_offer_percentage':total_offer_percentage,'mobile': allmobile, 
         'cart_count':total_quantity, 'bestseller':allbestseller, 'fresh': allfresh,'mainmobile':allmainmobile,
-        'electronicslaptop':allelectronicslaptop,'electronicsheadphones':allelectronicsheadphones, 'vocalforlocal':allvocalforloacal,
+        'electronicslaptop':allelectronicslaptop,'electronicsheadphones':allelectronicsheadphones, 'electronicsstored':allelectronicsstored, 'vocalforlocal':allvocalforloacal,
         'vocalforlocal1':allvocalforloacal1,'shopclothing':allshopclothing,
         'shopfootwear':allshopfootwear, 'Budgetaddons':allbudgetaddons, 'shopBeauty':allShopBeauty, 'bedroom':allbedroom,
         'mainob':allmainob,
@@ -266,75 +198,6 @@ def cart_view(request):
 
 #--------------------------------------------bestseller watch-------------------------------------
 
-def filtered_products1(request, bestseller_id):
-    best = get_object_or_404(bestseller, id=bestseller_id)  # ✅ different variable name
-
-    nameofbestseller = best.contentm
-    bestsellerprice = best.pricewacth
-
-    if nameofbestseller is None:
-        return redirect('filtered_products')
-
-    cart_item, created = CartItem.objects.get_or_create(
-        product=None,
-        content=nameofbestseller,
-        price=bestsellerprice,
-        defaults={'quantity': 1,'off174':0}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER', 'filtered_products'))
-
-
-def product_details_bestseller(request, bestseller_id):
-    product = get_object_or_404(bestseller, id=bestseller_id)
-    return render(request, 'product_detail1.html', {'bestseller_product': product, 'type': 'bestseller',})
-
-
-def buy_now_bestseller(request, bestseller_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(bestseller, id=bestseller_id)
-
-    name = product.contentm or "Unknown Product"
-    image = product.Imagem
-
-    # ✅ Safe decimal conversion for price
-    try:
-        price = Decimal(product.pricewacth)
-    except (InvalidOperation, TypeError, ValueError):
-        price = Decimal(0)
-
-    # ✅ Offer safe handling
-    try:
-        offer = Decimal(getattr(product, "offer", 0) or 0)
-    except (InvalidOperation, TypeError, ValueError):
-        offer = Decimal(0)
-
-    # ✅ Final price calculation
-    if offer > 0:
-        final_price = price - (price * offer / Decimal(100))
-    else:
-        final_price = price
-
-    # ✅ Save clean values in session
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price.quantize(Decimal('0.01')))
-    request.session['product_offer'] = str(offer.quantize(Decimal('0.01')))
-    request.session['product_final_price'] = str(final_price.quantize(Decimal('0.01')))
-
-    # ✅ Optional: store user email for order
-    if request.user.is_authenticated:
-        request.session['user_email'] = request.user.email
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
    
 
 def filtered_products(request):
@@ -343,10 +206,6 @@ def filtered_products(request):
     cart_count = CartItem.objects.aggregate(total_qty=Sum('quantity'))['total_qty'] or 0 
     
     return render(request, 'product_list.html', {'matched_data': matched_data,'cart_count':cart_count})
-
-
-
-
 
 #----------------------------------------------end of bestseller of watch--------------------------------
 
@@ -361,74 +220,6 @@ def remove_from_cart(request, item_id):
 def fresh(request):
     allfresh = Fresh.objects.all()
     return render(request, 'fresh.html',{'fresh':allfresh})
-
-def fresh_addtocart(request, fresh_id):
-    fresh = get_object_or_404(Fresh,id=fresh_id)
-
-    nameoffresh = fresh.nameoffresh
-    freshoffer = fresh.offerfresh
-    freshprice = fresh.pricefresh
-
-    if nameoffresh is None:
-        return redirect('fresh')
-     
-    cart_item, created = CartItem.objects.get_or_create(
-        product = None,
-        content = nameoffresh,
-        price = freshprice,
-        defaults={'quantity':1,'off174':freshoffer}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER','fresh'))    
-
-
-def product_details_viewelectronicsfresh(request, fresh_id):
-    product = get_object_or_404(Fresh, id=fresh_id)
-    price = Decimal(product.pricefresh)
-    offer = Decimal(product.offerfresh)
-    final_pricefresh = price - (price * offer / Decimal(100))
-
-    return render(request, 'product_detail1.html', {'fresh_product': product, 'type': 'fresh',
-   'final_pricefresh':final_pricefresh,'type':'fresh'})
-
-
-def buy_now_fresh(request, fresh_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(Fresh, id=fresh_id)
-
-    # Extract values from model
-    name = product.nameoffresh
-    price = Decimal(product.pricefresh)
-    offer = Decimal(product.offerfresh)
-    image = product.vegitablebimagefresh
-
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
-
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
-    # Calculate final discounted price
-    final_price = price - (price * offer / Decimal(100))
-
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price)
-    request.session['product_offer'] = str(offer)
-    request.session['product_final_price'] = str(final_price)
-
-
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "offer": offer,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
-   
 
 #------------------------------------------------end of Fresh vegetables---------------------------------------------
 
@@ -448,102 +239,13 @@ def mobilepage(request):
         mainmobiles.final_price = get_discounted(mainmobiles.mainmmrp,mainmobiles.mainmoffer)
     return render(request, 'mobile.html',
     {'mainmobile':allmainmobiles,'today':today,'mobile':allmobile})
-
-def mainmobileaddtocart(request, mainmobile_id):
-    mainmobile1 = get_object_or_404(mainmobile, id=mainmobile_id)
-
-    nameofmainmobile = mainmobile1.nameofmmobile
-    specsofmaincamera = mainmobile1.specsofcamera
-    specsofmaindurability = mainmobile1.specsofdurability
-    mainmrpprice = mainmobile1.mainmprice
-    mainmobileoffer = mainmobile1.mainmoffer
-
-    if nameofmainmobile is None:
-        return redirect('mobile')
-    
-    content_combined = f"{nameofmainmobile} | Camera: {specsofmaincamera} | Durability: {specsofmaindurability}"
-    
-    cart_item, created = CartItem.objects.get_or_create(
-        product = None,
-        content = content_combined,
-        price = mainmrpprice,
-        defaults={'quantity':1, 'off174':mainmobileoffer}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER','mobile'))    
-
-def buy_now_mobilepage(request, mobilepage_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(mainmobile, id=mobilepage_id)
-
-    # Extract values from model
-    name = product.nameofmmobile
-    price = Decimal(product.mainmprice)
-    offer = Decimal(product.mainmoffer)
-    image = product.mainimagemobile
-     
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
-
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
-    # Calculate final discounted price
-    final_price = price - (price * offer / Decimal(100))
-
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price)
-    request.session['product_offer'] = str(offer)
-    request.session['product_final_price'] = str(final_price)
+  
 
 
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "offer": offer,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
-
-def product_details_mobilepage(request, mobilepage_id):
-    product = get_object_or_404(mainmobile, id=mobilepage_id)
-    price = Decimal(product.mainmprice)
-    offer = Decimal(product.mainmoffer)
-    final_pricemobilepage = price - (price * offer / Decimal(100))
-
-    return render(request, 'product_detail1.html', {'mobilepage_product': product, 'type': 'mobilepage',
-   'final_pricemobilepage':final_pricemobilepage,'type':'mobilepage'})
 
 #---------------------------------------------end of mobile page ----------------------------------------
 
-#----------------------------electronics laptop-------------------------------------
-
-def laptopaddtocart(request, laptop_id):
-    ellaptop = get_object_or_404(electronicslaptop,id=laptop_id)
-
-    nameofelectronicslaptop = ellaptop.laptopname
-    electronicslaptopoffer = ellaptop.laptopoffer
-    electronicslaptopmrpprice = ellaptop.laptopmrpprice
-
-    if nameofelectronicslaptop is None:
-        return redirect('electronics')
-    
-    cart_item, created = CartItem.objects.get_or_create(
-        product = None,
-        content = nameofelectronicslaptop,
-        price = electronicslaptopmrpprice,
-        defaults={'quantity':1,'off174':electronicslaptopoffer}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER','electronics'))    
-
+ 
 #-----------------------------------------electronics page ----------------------------------------------------
 def electronics(request):
     allelectronicslaptop = electronicslaptop.objects.all()
@@ -566,181 +268,293 @@ def electronics(request):
     'electronicsstored':allelectronicsstored,
     })
 
-def product_details_viewelectronicslaptop(request, laptop_id):
-    product = get_object_or_404(electronicslaptop, id=laptop_id)
-    price = Decimal(product.laptopmrpprice)
-    offer = Decimal(product.laptopoffer)
-    final_pricelaptop = price - (price * offer / Decimal(100))
-    return render(request, 'product_detail1.html', {'laptop_product': product, 'type': 'laptop',
-    'final_pricelaptop':final_pricelaptop,'type':'laptop'})
-
-def buy_now_laptop(request, laptop_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(electronicslaptop, id=laptop_id)
-
-    # Extract values from model
-    name = product.laptopname
-    price = Decimal(product.laptopmrpprice)
-    offer = Decimal(product.laptopoffer)
-    image = product.laptopimage
-     
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
-
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
-    # Calculate final discounted price
-    final_price = price - (price * offer / Decimal(100))
-
-      #for send details for product user------
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price)
-    request.session['product_offer'] = str(offer)
-    request.session['product_final_price'] = str(final_price)
-
-
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "offer": offer,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
-
-
-#-------------------------------------------------------------electronics headphones-----------------------------------
-
-
-def headphonesaddtocart(request, headphones_id):
-    elheadphones = get_object_or_404(electronicsheadphones,id=headphones_id)
-
-    nameofelectronicsheadphones = elheadphones.headphonesname
-    electronicsheadphonesoffer = elheadphones.headphonesoffer
-    electronicsheadphonesmrpprice = elheadphones.headphonesmrpprice
-
-    if nameofelectronicsheadphones is None:
-        return redirect('electronics')
-    
-    cart_item, created = CartItem.objects.get_or_create(
-        product = None,
-        content = nameofelectronicsheadphones,
-        price = electronicsheadphonesmrpprice,
-        defaults={'quantity':1,'off174':electronicsheadphonesoffer}
-    )
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
-
-    return redirect(request.META.get('HTTP_REFERER','electronics'))    
-
-
-def product_details_viewelectronicsheadphones(request, headphones_id):
-    product = get_object_or_404(electronicsheadphones, id=headphones_id)
-    price = Decimal(product.headphonesmrpprice)
-    offer = Decimal(product.headphonesoffer)
-    final_priceheadphones = price - (price * offer / Decimal(100))
-    return render(request, 'product_detail1.html', {'headphones_product': product, 'type': 'headphones',
-    'final_priceheadphones':final_priceheadphones,'type':'headphones'})
-
-
-def buy_now_headphones(request, headphones_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(electronicsheadphones, id=headphones_id)
-
-    # Extract values from model
-    name = product.headphonesname
-    price = Decimal(product.headphonesmrpprice)
-    offer = Decimal(product.headphonesoffer)
-    image = product.headphonesimage
-
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
-
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
-    # Calculate final discounted price
-    final_price = price - (price * offer / Decimal(100))
-
-     #for send details for product user------
-    request.session['product_name'] = name
-    request.session['product_price'] = str(price)
-    request.session['product_offer'] = str(offer)
-    request.session['product_final_price'] = str(final_price)
-
-
-    # Render template
-    return render(request, "buy_now1.html", {
-        "product": product,
-        "name": name,
-        "price": price,
-        "offer": offer,
-        "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
-    })
-
-
 #-------------------------------------------------------electronics stored function -------------------------------------
-def storedaddtocart(request, stored_id):
-    product = get_object_or_404(electronicsstored, id=stored_id)
+def add_to_cart_dynamic(request, product_id, product_type):
+    # 1️⃣ Map sabhi models ko
+    model_map = {
+        'stored': electronicsstored,
+        'headphones': electronicsheadphones,
+        'laptop': electronicslaptop,
+        'vocalforlocal': vocalforlocal,
+        'vocalforlocal1': vocalforlocal1,
+        'mobile':mobile,
+        'fresh':Fresh,
+        'mobilepage':mainmobile,
+    }
 
+    # 2️⃣ Model check
+    model = model_map.get(product_type)
+    if not model:
+        return redirect('home')
+
+    # 3️⃣ Product nikal lo
+    product = get_object_or_404(model, id=product_id)
+
+    # 4️⃣ Field logic based on product_type
+    if product_type in ['stored', 'headphones', 'laptop']:
+        name = getattr(product, f"{product_type}name")
+        offer = getattr(product, f"{product_type}offer")
+        price = getattr(product, f"{product_type}mrpprice")
+
+    elif product_type == 'vocalforlocal':
+        name = product.interestincontent
+        offer = product.offer
+        price = product.price
+
+    elif product_type == 'vocalforlocal1':
+        name = product.interestincontent1
+        offer = product.offer1
+        price = product.price1
+
+    elif product_type == 'mobile':
+        name = product.nameofmobile
+        offer = product.offermobile
+        price = product.mrpmobile
+
+    elif product_type == 'fresh':
+        name = product.nameoffresh
+        offer = product.offerfresh
+        price = product.pricefresh  
+
+    elif product_type == 'mobilepage':
+        name = product.nameofmmobile
+        offer = product.mainmoffer
+        price = product.mainmprice
+    
+
+    else:
+        # fallback agar future me kuch aur product_type aaya
+        name, offer, price = "Unknown", 0, 0
+
+    # 5️⃣ Cart me item daalo
     cart_item, created = CartItem.objects.get_or_create(
-        product=None,  # since this is from electronicsstored, not main product model
-        content=product.storedname,
-        price=product.storedmrpprice,
-        defaults={'quantity': 1, 'off174': product.storedoffer}
+        product=None,
+        content=name,
+        price=price,
+        defaults={'quantity': 1, 'off174': offer}
     )
 
     if not created:
         cart_item.quantity += 1
         cart_item.save()
 
-    return redirect(request.META.get('HTTP_REFERER','electronics'))    
-    # apne cart view ka name lagao
+    # 6️⃣ Redirect back
+    return redirect(request.META.get('HTTP_REFERER', 'electronics'))
 
-def product_details_viewelectronicsstored(request, stored_id):
-    product = get_object_or_404(electronicsstored, id=stored_id)
-    price = Decimal(product.storedmrpprice)
-    offer = Decimal(product.storedoffer)
-    final_pricestored = price - (price * offer / Decimal(100))
-    return render(request, 'product_detail1.html', {'stored_product': product, 'type': 'stored',
-    'final_pricestored':final_pricestored,'type':'stored'})
 
-def buy_now_stored(request, stored_id):
-    # Get product from electronicsstored model
-    product = get_object_or_404(electronicsstored, id=stored_id)
 
-    # Extract values from model
-    name = product.storedname
-    price = Decimal(product.storedmrpprice)
-    offer = Decimal(product.storedoffer)
-    image = product.storedimage
 
-    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
+def product_detail_dynamic(request, product_id, product_type):
+    model_map = {
+        'stored': electronicsstored,
+        'headphones': electronicsheadphones,
+        'laptop': electronicslaptop,
+        'vocalforlocal': vocalforlocal,
+        'vocalforlocal1': vocalforlocal1,
+        'mobile':mobile,
+        'fresh':Fresh,
+        'mobilepage':mainmobile,
+    }
 
-    if extra_offer:
-        # Add extra 10% discount
-        offer += Decimal(10)
+    # model select karte hain
+    model = model_map.get(product_type)
+    if not model:
+        return redirect('home')
 
-    # Calculate final discounted price
+
+    bgimage = ''
+    heading = ''
+    paragraph = ''
+    paragraph1 = ''
+    term = ''
+    mainoffer = ''
+    mrp = ''
+    today = ''
+    processor = ''
+    battery = ''
+    camera = '' 
+    Ram = ''
+
+     # 3️⃣ Product nikal lo
+    product = get_object_or_404(model, id=product_id)
+
+    # 4️⃣ Field logic based on product_type
+    if product_type in ['stored', 'headphones', 'laptop']:
+        name = getattr(product, f"{product_type}name")
+        offer = getattr(product, f"{product_type}offer")
+        price = getattr(product, f"{product_type}mrpprice")
+        image = getattr(product, f"{product_type}image")
+        logo = image
+
+    elif product_type == 'vocalforlocal':
+        name = product.interestincontent
+        offer = product.offer
+        price = product.price
+        image = product.image
+        logo = product.logo
+
+    elif product_type == 'vocalforlocal1':
+        name = product.interestincontent1
+        offer = product.offer1
+        price = product.price1
+        image = product.image1
+        logo = product.logo1
+
+    elif product_type == 'mobile':
+        name = product.nameofmobile
+        offer = product.offermobile
+        price = product.mrpmobile
+        image = product.imagemobile
+        logo = image  
+
+    elif product_type == 'fresh':
+        name = product.nameoffresh
+        offer = product.offerfresh
+        price = product.pricefresh
+        image = product.vegitablebimagefresh
+        logo = image
+        bgimage = product.bgimagefresh
+        heading = product.headingfresh1
+        paragraph = product.paragraphfresh
+        paragraph1 = product.paragraphfresh1
+        term = product.Termfresh     
+    
+    elif product_type == 'mobilepage':
+        name = product.nameofmmobile
+        offer = product.mainmoffer
+        mainoffer = product.mainmofferoncreditcard
+        price = product.mainmprice
+        mrp = product.mainmmrp
+        today = product.mainmtodaydate
+        image = product.mainimagemobile
+        logo = image
+        bgimage = product.bgmainimagembile
+        heading = product.mainmdeals
+        paragraph = product.mainmratings
+        term = product.specsofdurability 
+        processor = product.specsfofprocessor
+        battery = product.specsofbattery
+        camera = product.specsofcamera 
+        Ram = product.specsofmmobileRamrom
+
+
+    else:
+        # fallback agar future me kuch aur product_type aaya
+        name, offer, price = "Unknown", 0, 0
+
     final_price = price - (price * offer / Decimal(100))
 
-    #for send details for product user------
+    context = {
+        'product': product,
+        'name1': name,
+        'price1': price,
+        'offer1': offer,
+        'product_type': product_type,
+        'final_price': final_price,
+        'image1': image,
+        'type': product_type,
+        'logo':logo,
+        'bgimage':bgimage,
+        'heading':heading,
+        'paragraph':paragraph,
+        'paragraph1':paragraph1,
+        'term':term,
+        'processor':processor,
+        'battery':battery,
+        'camera':camera,
+        'Ram':Ram,
+        'mainoffer':mainoffer,
+        'mrp':mrp,
+        'today':today,
+    }
+
+    return render(request, 'product_detail1.html', context)
+
+
+def buy_now_dynamic(request, product_id, product_type):
+    model_map = {
+        'stored': electronicsstored,
+        'headphones': electronicsheadphones,
+        'laptop': electronicslaptop,
+        'vocalforlocal':vocalforlocal,
+        'vocalforlocal1':vocalforlocal1,
+        'mobile':mobile,
+        'fresh':Fresh,
+        'mobilepage':mainmobile,
+    }
+
+    model = model_map.get(product_type)
+    if not model:
+        return redirect('home')
+    
+    # product nikal lo
+    product = get_object_or_404(model,id=product_id)
+
+    if product_type in ['stored','headphones','laptop']:
+         name = getattr(product, f"{product_type}name")
+         price = Decimal(getattr(product, f"{product_type}mrpprice"))
+         offer = Decimal(getattr(product, f"{product_type}offer"))
+         image = getattr(product, f"{product_type}image")
+
+    elif product_type == 'vocalforlocal':
+        name = product.interestincontent
+        offer = product.offer
+        price = product.price
+        image = product.image
+
+    elif product_type == 'vocalforlocal1':
+        name = product.interestincontent1
+        offer = product.offer1
+        price = product.price1
+        image = product.image1
+
+    elif product_type == 'mobile':
+        name = product.nameofmobile
+        offer = product.offermobile
+        price = product.mrpmobile
+        image = product.imagemobile
+
+    elif product_type == 'fresh':
+        name = product.nameoffresh
+        offer = product.offerfresh
+        price = product.pricefresh 
+        image = product.vegitablebimagefresh 
+
+    elif product_type == 'mobilepage':
+        name = product.nameofmmobile
+        offer = product.mainmoffer
+        price = product.mainmprice    
+        image = product.mainimagemobile
+
+    else:
+        name,offer.price = "unknown",0,0    
+
+    extra_offer = request.GET.get('extra_offer', 'false') == 'true'
+    if extra_offer:
+        offer += Decimal(10)
+
+    final_price = price - (price * offer / Decimal(100))
+
+    # session me data bhejna
     request.session['product_name'] = name
     request.session['product_price'] = str(price)
     request.session['product_offer'] = str(offer)
     request.session['product_final_price'] = str(final_price)
 
-    # Render template
+    # ✅ Optional: store user email
+    if request.user.is_authenticated:
+        request.session['user_email'] = request.user.email
+
+
     return render(request, "buy_now1.html", {
         "product": product,
         "name": name,
         "price": price,
         "offer": offer,
         "final_price": final_price.quantize(Decimal('0.01')),
-        "image": image
+        "image": image,
     })
+
 
 #-------------------------------------------------------end of electronics stored----------------------------------------------------
 

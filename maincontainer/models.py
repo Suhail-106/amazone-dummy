@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from datetime import date
 from django.contrib.auth.models import User
+from django.utils.timezone import now
 
 
 
@@ -108,7 +109,7 @@ class mainmobile(models.Model):
     mainmmrp = models.DecimalField(max_digits=6,decimal_places=0)
     mainmoffer = models.DecimalField(max_digits=2, decimal_places=0)
     mainmofferoncreditcard = models.DecimalField(max_digits=2,decimal_places=0)
-    mainmtodaydate = models.DateField(default=date.today)
+    mainmtodaydate = models.DateField(default=now)
    
     def __str__(self):
      return self.nameofmmobile
