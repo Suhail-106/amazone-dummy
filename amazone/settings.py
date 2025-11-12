@@ -145,8 +145,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'companypvtltd35@gmail.com'
-EMAIL_HOST_PASSWORD = 'qiplpmuhcjbvzjpy'
+EMAIL_HOST_USER = '' # Add your mail in this line under inverted comma.
+EMAIL_HOST_PASSWORD = '' # Add you app password of mail,
 
 #SSL CONTEXT KE LIYE
 EMAIL_SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
