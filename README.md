@@ -16,7 +16,7 @@ A Django-based Amazon clone with user authentication, OTP verification, Tailwind
 ## 📥 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Suhail-106/amazone-clone.git
+git clone https://github.com/Suhail-106/amazone-dummy.git
 cd amazone-clone
 ```
 
@@ -79,20 +79,23 @@ Access Project at: **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
 #### Windows (CMD/PowerShell):
 
 ```bash
-set EMAIL_USER="your_email@gmail.com"
-set EMAIL_PASS="your_app_password"
+set EMAIL_USER="your_email@gmail.com" Go to -> `Inner directory of settings.py` line **148** Add you mail.
+set EMAIL_PASS="your_app_password"  Go to -> 'Inner directory of settings.py` line **149** Add you app password of mail.
 ```
 
 #### Linux/macOS (Bash/Zsh):
 
 ```bash
-export EMAIL_USER="your_email@gmail.com"
-export EMAIL_PASS="your_app_password"
+set EMAIL_USER="your_email@gmail.com" Go to -> `Inner directory of settings.py` line **148** Add you mail.
+set EMAIL_PASS="your_app_password"  Go to -> 'Inner directory of settings.py` line **149** Add you app password of mail.
 ```
 
 ### Step 3 – Set Email in `views.py`
 
-Go to `maincontainer` → Function `user_login` → Line **468** → Add your email.
+Go to `maincontainer` → Function `user_login` → Line **640** → Add your email.  
+Go to `maincontainer` -> Function `add_address` -> **853** -> Add your email. For product information and user address to gave to personal mail.  
+Go to `maincontainer` -> Function `add_address` -> **854** Add you personal mail. For product information and user address take in personal mail.  
+Last step `maincontainer` -> Function `add_address -> **862** Add your mail for gave confirmation and informaiton of product to user.   
 
 ---
 
@@ -102,7 +105,7 @@ Go to `maincontainer` → Function `user_login` → Line **468** → Add your em
 Username: adminhasan
 Password: back1234
 ```
-
+ 
 ---
 
 ## 🧪 Test & Use
