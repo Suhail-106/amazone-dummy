@@ -637,7 +637,7 @@ def user_login(request):   # apna function ka naam user_login rakho, clash avoid
         send_mail(
             subject = 'Your otp code',
             message = f'Hello {user.username},\nYour otp code is: {otp}',
-            from_email = 'companypvtltd35@gmail.com',
+            from_email = '', #Add you email for otp send to user confirmation
             recipient_list = [user.email],
         )
         time.sleep(3)
@@ -850,8 +850,8 @@ Thank you for shopping with us!
         admin_email = EmailMessage(
             subject="🛒 New Order Received",
             body=force_str(admin_message),
-            from_email="companypvtltd35@gmail.com",
-            to=["hasansuhail392@gmail.com"],
+            from_email="", #add you mail to gave informaiton to your personal mail and user product details with user address informaiton.
+            to=[""], #Add your mail to take a information to your mail
         )
         admin_email.send(fail_silently=False)
 
@@ -859,7 +859,7 @@ Thank you for shopping with us!
             user_email = EmailMessage(
                 subject=f"Order Confirmation — {product_name}",
                 body=force_str(user_message),
-                from_email="companypvtltd35@gmail.com",
+                from_email="", # add your mail
                 to=[email],
             )
             user_email.send(fail_silently=False)
