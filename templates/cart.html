@@ -97,7 +97,7 @@
 
                {% for elheadphones in electronicsheadphones %}
                 {% if elheadphones.headphonesname == item.content %}
-                <a href="{% url 'Product_detailsheadphones' elheadphones.id  %}">
+                <a href="{% url 'product_detail_dynamic' elheadphones.id  %}">
               <img class="w-20 h-20 object-cover hover:scale-110 transition-transform
                   ease-in-out duration-700 rounded mr-4"src="{{ elheadphones.headphonesimage }}" alt="">
                 </a>
