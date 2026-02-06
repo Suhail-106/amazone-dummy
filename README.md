@@ -1,4 +1,4 @@
-
+# Hi i am Suhail Hasan 
 # Amazon dummy Project
 
 A Django-based Amazon clone with user authentication, OTP verification, Tailwind integration, and secure email handling.
